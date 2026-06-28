@@ -1,0 +1,59 @@
+/* ── CORTINA ── */
+#cortina-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; pointer-events: none;
+}
+#cortina-bara {
+  position: fixed; top: 0; left: 0; right: 0; height: 26px;
+  background: #061520;
+  border-bottom: 2px solid #c9a84c;
+  z-index: 10000;
+  box-shadow: 0 2px 16px rgba(201,168,76,0.25);
+}
+#cortina-stanga,
+#cortina-dreapta {
+  position: absolute; top: 0; height: 100%; width: 50%; overflow: hidden;
+  transition: transform 2.2s cubic-bezier(.77,0,.18,1);
+}
+#cortina-stanga  { left: 0;  background: linear-gradient(160deg,#0b2d42 0%,#061b2a 60%,#030f18 100%); transform-origin: left; }
+#cortina-dreapta { right: 0; background: linear-gradient(200deg,#0b2d42 0%,#061b2a 60%,#030f18 100%); transform-origin: right; }
+
+.cortina-cute { position: absolute; inset: 0; display: flex; }
+.cortina-cuta { flex: 1; height: 100%; }
+.cortina-cuta:nth-child(odd)  { background: rgba(0,0,0,0.15); }
+.cortina-cuta:nth-child(even) { background: rgba(255,255,255,0.025); }
+.cortina-cuta:nth-child(3n)   { background: rgba(201,168,76,0.04); }
+
+.cortina-franjuri { position: absolute; bottom: 0; left: 0; right: 0; display: flex; z-index: 2; }
+.cortina-franj { flex: 1; background: rgba(201,168,76,0.12); border-radius: 0 0 50% 50%; }
+
+/* Logo DOAR pe cortina - dispare complet înainte să apară hero */
+#cortina-logo {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10001; text-align: center; pointer-events: none;
+  opacity: 0; animation: logoApare .7s ease .2s forwards;
+}
+.cortina-logo-linie { width: 50px; height: 1px; background: #c9a84c; margin: 10px auto; opacity: .6; }
+.cortina-logo-elpis {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(48px, 9vw, 86px);
+  font-weight: 300; color: #fff;
+  letter-spacing: 14px; line-height: 1; display: block;
+  text-shadow: 0 0 40px rgba(201,168,76,.3);
+}
+.cortina-logo-sub {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 10px; letter-spacing: 4px;
+  color: #c9a84c; text-transform: uppercase;
+  display: block; margin-top: 6px;
+}
+@keyframes logoApare {
+  from { opacity:0; transform:translate(-50%,-48%); }
+  to   { opacity:1; transform:translate(-50%,-50%); }
+}
+
+/* Stări finale */
+#cortina-stanga.trasa  { transform: translateX(-100%); }
+#cortina-dreapta.trasa { transform: translateX(100%); }
+#cortina-overlay.ascuns { opacity:0; transition: opacity .4s ease; pointer-events: none; }

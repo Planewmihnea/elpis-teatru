@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Despre noi — Trupa de Teatru Elpis</title>
+  <link rel="stylesheet" href="../css/stil.css">
+  <style>
+    .despre-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 55px; align-items: center; max-width: 1000px; margin: 0 auto;
+    }
+    .despre-img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover;
+      border: 1px solid var(--border-auriu); border-radius: var(--radius);
+    }
+    .despre-text h2 { font-size: clamp(26px, 4vw, 40px); margin-bottom: 16px; }
+    .despre-text p  { color: var(--text-secundar); line-height: 1.9; margin-bottom: 14px; font-size: 14px; }
+
+    .valori-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
+    .valoare {
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 26px 20px; text-align: center; transition: var(--tranzitie);
+    }
+    .valoare:hover { border-color: var(--border-auriu); }
+    .valoare-icon { font-size: 30px; display: block; margin-bottom: 12px; }
+    .valoare h3 { font-size: 18px; color: var(--auriu); margin-bottom: 8px; }
+    .valoare p  { color: var(--text-secundar); font-size: 13px; line-height: 1.8; }
+
+    @media(max-width:768px) { .despre-grid, .valori-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-titlu">ELPIS</span>
+    <span class="nav-logo-sub">Trupa de Teatru · Constanța</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Acasă</a></li>
+    <li><a href="spectacole.html">Spectacole</a></li>
+    <li><a href="despre.html">Despre noi</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-actiuni">
+    <a href="#" id="btn-wallet" class="btn-icon btn-icon-wallet" style="display:none" title="Biletele mele">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><path d="M2 10h20"/></svg>
+      Wallet
+    </a>
+    <a href="#" id="btn-auth" class="btn btn-secundar">Intră în cont</a>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="eyebrow">Cine suntem</span>
+  <h1>Povestea <em>noastră</em></h1>
+</div>
+
+<section class="sectiune">
+  <div class="despre-grid">
+    <img class="despre-img"
+      src="https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80"
+      alt="Trupa de Teatru Elpis"
+      onerror="this.style.background='var(--albastru-card)';this.style.height='300px';this.removeAttribute('src')">
+    <div class="despre-text">
+      <span class="eyebrow">Din 2004</span>
+      <h2>Două decenii de <em>artă scenică</em></h2>
+      <p>Trupa de Teatru Elpis Constanța a luat ființă în 2004 cu misiunea de a aduce arta teatrală mai aproape de comunitatea pontică. De-a lungul anilor, am construit un spațiu în care creativitatea, emoția și povestea se întâlnesc pe scenă.</p>
+      <p>Numele nostru vine din mitologia greacă — <strong style="color:var(--auriu)">Elpis</strong>, zeița speranței, singura care a rămas în cutia Pandorei după ce toate relele au scăpat în lume. Speranța este esența a ceea ce oferim publicului nostru.</p>
+      <p>Cu zeci de producții și mii de spectatori de-a lungul anilor, Trupa de Teatru Elpis a devenit un reper cultural al vieții artistice din Constanța.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sectiune bg-mid">
+  <div class="sectiune-titlu">
+    <span class="eyebrow">Ce ne definește</span>
+    <h2>Valorile <em>noastre</em></h2>
+  </div>
+  <div class="valori-grid">
+    <div class="valoare">
+      <span class="valoare-icon">🎭</span>
+      <h3>Autenticitate</h3>
+      <p>Fiecare producție este construită cu grijă pentru detaliu, autenticitate emoțională și respect față de text și public.</p>
+    </div>
+    <div class="valoare">
+      <span class="valoare-icon">🌊</span>
+      <h3>Comunitate</h3>
+      <p>Suntem o trupă a Constanței și pentru Constanța. Fiecare spectacol este un dialog între scenă și publicul nostru.</p>
+    </div>
+    <div class="valoare">
+      <span class="valoare-icon">✨</span>
+      <h3>Inovație</h3>
+      <p>Combinăm tradițiile teatrale clasice cu abordări contemporane pentru a crea experiențe scenice memorabile.</p>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal"><button class="modal-inchide" onclick="inchideModal()">✕</button><div id="modal-continut"></div></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-titlu">ELPIS</div><p>Trupa de Teatru Elpis Constanța — producții memorabile pe scena pontică.</p></div>
+    <div><span class="footer-sectiune-titlu">Navigare</span><ul class="footer-links"><li><a href="../index.html">Acasă</a></li><li><a href="spectacole.html">Spectacole</a></li><li><a href="despre.html">Despre noi</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><span class="footer-sectiune-titlu">Contact</span><ul class="footer-links"><li><a href="mailto:contact@elpis.ro">contact@elpis.ro</a></li><li><a href="tel:+40241000000">0241 000 000</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">© 2024 Trupa de Teatru Elpis Constanța.</div>
+</footer>
+<script src="../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Trupa de Teatru Elpis Constanța — Rezervă bilete online">
+  <title>Trupa de Teatru Elpis Constanța</title>
+  <link rel="stylesheet" href="css/stil.css">
+  <link rel="stylesheet" href="css/cortina.css">
+  <style>
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden;
+      padding: 100px 5% 80px;
+      background: linear-gradient(145deg, #0e4d60 0%, #1b7a96 40%, #0e3d4f 100%);
+    }
+
+    /* Gradient overlay */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(52,128,153,0.4) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Canvas pentru particule de pulbere */
+    #pulbere-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-continut {
+      position: relative; z-index: 2;
+      max-width: 800px; width: 100%;
+    }
+
+    .hero-linie {
+      width: 0; height: 1px; background: var(--auriu);
+      margin: 0 auto 24px;
+      animation: linieCreste 1.2s ease .3s forwards;
+    }
+    @keyframes linieCreste { to { width: 55px; } }
+
+    .hero-pretitlu {
+      font-size: 11px; letter-spacing: 5px; color: var(--auriu);
+      text-transform: uppercase; display: block; margin-bottom: 8px;
+      opacity: 0; animation: apare 1s .5s ease forwards;
+    }
+
+    /* Titlul ELPIS — apare DUPĂ ce cortina s-a terminat, fără suprapunere */
+    .hero-titlu {
+      font-family: var(--font-display);
+      font-size: clamp(64px, 13vw, 130px);
+      font-weight: 300; color: var(--alb);
+      letter-spacing: 16px; line-height: 1;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: apare 1s .6s ease forwards;
+      text-shadow: 0 0 60px rgba(52,128,153,0.6), 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .hero-subtitlu {
+      font-size: 11px; letter-spacing: 5px; color: rgba(255,255,255,0.85);
+      text-transform: uppercase; display: block; margin-bottom: 36px;
+      opacity: 0; animation: apare 1s .8s ease forwards;
+    }
+
+    .hero-butoane {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      opacity: 0; animation: apare 1s 1.0s ease forwards;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0; animation: apare 1s 1.4s ease forwards;
+    }
+    .hero-scroll span { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+    .scroll-linie { width: 1px; height: 44px; background: linear-gradient(to bottom, var(--auriu), transparent); animation: puls 2s ease-in-out infinite; }
+    @keyframes puls { 0%,100%{opacity:1} 50%{opacity:.3} }
+    @keyframes apare { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── CUM FUNCȚIONEAZĂ ── */
+    .pas { text-align: center; padding: 16px; }
+    .pas-nr { font-family: var(--font-display); font-size: 52px; color: rgba(201,168,76,.3); line-height: 1; display: block; margin-bottom: 12px; }
+    .pas h3 { font-size: 19px; margin-bottom: 10px; }
+    .pas p { color: var(--text-secundar); font-size: 13px; line-height: 1.8; }
+
+    /* Secțiunea cum pe fundal deschis */
+    .pas-light h3 { color: var(--albastru-dark); }
+    .pas-light p { color: #2a5f74; }
+    .pas-light .pas-nr { color: rgba(52,128,153,.35); }
+
+    @media(max-width:600px){ .hero-titlu { letter-spacing: 8px; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-titlu">ELPIS</span>
+    <span class="nav-logo-sub">Trupa de Teatru · Constanța</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Acasă</a></li>
+    <li><a href="pages/spectacole.html">Spectacole</a></li>
+    <li><a href="pages/despre.html">Despre noi</a></li>
+    <li><a href="pages/contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-actiuni">
+    <!-- Iconița Wallet — apare doar dacă ești logat -->
+    <a href="#" id="btn-wallet" class="btn-icon btn-icon-wallet" style="display:none" title="Biletele mele">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/>
+        <path d="M2 10h20"/>
+      </svg>
+      Wallet
+    </a>
+    <a href="#" id="btn-auth" class="btn btn-secundar">Intră în cont</a>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="pulbere-canvas"></canvas>
+
+  <div class="hero-continut">
+    <div class="hero-linie"></div>
+    <span class="hero-pretitlu">Trupa de Teatru</span>
+    <h1 class="hero-titlu">ELPIS</h1>
+    <span class="hero-subtitlu">Constanța</span>
+    <div class="hero-butoane">
+      <a href="pages/spectacole.html" class="btn btn-primar">Vezi spectacolele</a>
+      <a href="#" class="btn btn-alb" onclick="deschideModal('inregistrare'); return false;">Creează cont gratuit</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Descoperă</span>
+    <div class="scroll-linie"></div>
+  </div>
+</section>
+
+<!-- SPECTACOLE CURENTE -->
+<section class="sectiune bg-mid">
+  <div class="sectiune-titlu">
+    <span class="eyebrow">Pe scenă</span>
+    <h2>Spectacolele <em>noastre</em></h2>
+    <p>Rezervă-ți locul la producțiile Trupei de Teatru Elpis</p>
+  </div>
+  <div class="grid-3" id="spectacole-featured">
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-secundar)">
+      <span class="spinner"></span> Se încarcă spectacolele...
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:40px">
+    <a href="pages/spectacole.html" class="btn btn-secundar">Toate spectacolele →</a>
+  </div>
+</section>
+
+<!-- CUM FUNCȚIONEAZĂ -->
+<section class="sectiune bg-light">
+  <div class="sectiune-titlu">
+    <span class="eyebrow" style="color:var(--auriu-inchis)">Simplu și rapid</span>
+    <h2>Cum <em>rezervi</em> un bilet</h2>
+  </div>
+  <div class="grid-3" style="max-width:860px;margin:0 auto">
+    <div class="pas pas-light">
+      <span class="pas-nr">01</span>
+      <h3>Creează cont</h3>
+      <p>Înregistrează-te gratuit. Vei primi un cod de verificare pe email pentru securitate.</p>
+    </div>
+    <div class="pas pas-light">
+      <span class="pas-nr">02</span>
+      <h3>Alege spectacolul</h3>
+      <p>Selectează spectacolul dorit, data e completată automat. Introdu numele fiecărui participant.</p>
+    </div>
+    <div class="pas pas-light">
+      <span class="pas-nr">03</span>
+      <h3>Primești biletele</h3>
+      <p>Fiecare participant primește biletul PDF cu cod QR unic, pe email și în Wallet-ul tău.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL AUTH -->
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal">
+    <button class="modal-inchide" onclick="inchideModal()">✕</button>
+    <div id="modal-continut"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-titlu">ELPIS</div>
+      <p>Trupa de Teatru Elpis Constanța aduce pe scenă producții memorabile care îmbogățesc sufletul și deschid minți.</p>
+    </div>
+    <div>
+      <span class="footer-sectiune-titlu">Navigare</span>
+      <ul class="footer-links">
+        <li><a href="index.html">Acasă</a></li>
+        <li><a href="pages/spectacole.html">Spectacole</a></li>
+        <li><a href="pages/despre.html">Despre noi</a></li>
+        <li><a href="pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="footer-sectiune-titlu">Contact</span>
+      <ul class="footer-links">
+        <li><a href="mailto:contact@elpis.ro">contact@elpis.ro</a></li>
+        <li><a href="tel:+40241000000">0241 000 000</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2024 Trupa de Teatru Elpis Constanța. Toate drepturile rezervate.</div>
+</footer>
+
+<script src="js/cortina.js"></script>
+<script src="js/app.js"></script>
+<script>
+// ── PARTICULE DE PULBERE ──
+(function() {
+  const canvas = document.getElementById('pulbere-canvas');
+  const ctx    = canvas.getContext('2d');
+  let W, H, particule = [];
+
+  function resize() {
+    const hero = document.querySelector('.hero');
+    W = canvas.width  = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+  }
+
+  function creeazaParticula() {
+    return {
+      x:  Math.random() * W,
+      y:  Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.4,
+      r:  Math.random() * 2.5 + 0.5,
+      op: Math.random() * 0.7 + 0.1,
+      dOp: (Math.random() - 0.5) * 0.01,
+      culoare: Math.random() > 0.6
+        ? `rgba(201,168,76,`     // auriu
+        : Math.random() > 0.5
+          ? `rgba(255,255,255,`  // alb
+          : `rgba(100,200,230,`  // teal
+    };
+  }
+
+  function init() {
+    resize();
+    particule = [];
+    for (let i = 0; i < 350; i++) particule.push(creeazaParticula());
+  }
+
+  function anima() {
+    ctx.clearRect(0, 0, W, H);
+    particule.forEach((p, i) => {
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.op += p.dOp;
+
+      if (p.op <= 0 || p.op >= 1) p.dOp *= -1;
+      if (p.y < -10 || p.y > H + 10 || p.x < -10 || p.x > W + 10) {
+        particule[i] = creeazaParticula();
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.culoare + Math.max(0, Math.min(1, p.op)) + ')';
+      ctx.fill();
+    });
+    requestAnimationFrame(anima);
+  }
+
+  window.addEventListener('resize', () => { resize(); });
+  init();
+  anima();
+})();
+
+// ── SPECTACOLE FEATURED ──
+async function incarcaFeatured() {
+  const c = document.getElementById('spectacole-featured');
+  try {
+    const d  = await api.get('/spectacole');
+    const sp = d.spectacole.slice(0, 3);
+    if (!sp.length) {
+      c.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-secundar)">Nu există spectacole programate momentan.</p>';
+      return;
+    }
+    c.innerHTML = sp.map(s => {
+      const trecut  = esteInTrecut(s.data);
+      const complet = s.nrBileteDisponibile === 0;
+      const cls     = trecut || complet ? 'complet' : '';
+      const link    = (!trecut && !complet) ? `onclick="window.location.href='pages/spectacole.html?id=${s._id}'"` : '';
+      return `<div class="card-spectacol ${cls}" ${link}>
+        <img class="card-imagine" src="${s.imagine || ''}" alt="${s.titlu}"
+          onerror="this.style.background='var(--albastru)';this.style.height='160px';this.removeAttribute('src')">
+        <div class="card-corp">
+          <span class="card-gen">${s.gen}</span>
+          <h3 class="card-titlu">${s.titlu}</h3>
+          <p class="card-meta">📅 ${formateazaData(s.data)}<br>🕐 ${formateazaOra(s.data)} · 🎭 ${s.sala}</p>
+          <div class="card-footer">
+            <span class="bilete-info"><span class="bilete-nr">${s.nrBileteDisponibile}</span> / ${s.nrTotalBilete} disponibile</span>
+            ${trecut ? '<span class="badge badge-trecut">Trecut</span>' : complet ? '<span class="badge badge-complet">Complet</span>' : '<span class="badge badge-disponibil">Disponibil</span>'}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (err) {
+    c.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-secundar)">Nu s-au putut încărca spectacolele.</p>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', incarcaFeatured);
+</script>
+</body>
+</html>

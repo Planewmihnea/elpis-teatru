@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet — Trupa de Teatru Elpis</title>
+  <link rel="stylesheet" href="../css/stil.css">
+  <style>
+    .wallet-header {
+      padding: 110px 5% 50px;
+      background: linear-gradient(160deg, rgba(52,128,153,0.15) 0%, transparent 60%);
+      border-bottom: 1px solid var(--border-auriu);
+    }
+    .wallet-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px; max-width: 1100px; margin: 0 auto;
+    }
+    .wallet-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+    .wstat {
+      text-align: center; padding: 14px 22px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border-auriu); border-radius: var(--radius);
+    }
+    .wstat-nr { font-family: var(--font-display); font-size: 32px; color: var(--auriu); display: block; line-height: 1; }
+    .wstat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secundar); margin-top: 4px; display: block; }
+
+    .wallet-body { max-width: 1100px; margin: 0 auto; padding: 40px 5%; }
+
+    .tab-uri { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+    .tab {
+      padding: 11px 22px; background: none; border: none;
+      color: var(--text-secundar); font-family: var(--font-body);
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: var(--tranzitie);
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .tab:hover { color: var(--alb); }
+    .tab.activ { color: var(--auriu); border-bottom-color: var(--auriu); }
+
+    /* Card rezervare */
+    .rez-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 12px;
+      overflow: hidden; transition: var(--tranzitie);
+    }
+    .rez-card:hover { border-color: rgba(201,168,76,0.3); }
+    .rez-card.anulat { opacity: 0.55; }
+
+    .rez-header {
+      padding: 18px 20px; display: flex; align-items: center;
+      justify-content: space-between; gap: 14px; flex-wrap: wrap;
+      cursor: pointer; user-select: none;
+    }
+    .rez-header h3 { font-family: var(--font-display); font-size: 20px; color: var(--alb); margin-bottom: 4px; }
+    .rez-header p { color: var(--text-secundar); font-size: 13px; line-height: 1.7; }
+    .rez-header-dx { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .rez-chevron { color: var(--text-secundar); font-size: 16px; transition: var(--tranzitie); }
+    .rez-card.deschis .rez-chevron { transform: rotate(180deg); }
+
+    .rez-body { display: none; border-top: 1px solid var(--border); }
+    .rez-card.deschis .rez-body { display: block; }
+
+    /* Participant bilet */
+    .pb-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 20px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 12px; flex-wrap: wrap;
+    }
+    .pb-row:last-child { border-bottom: none; }
+    .pb-stanga { display: flex; align-items: center; gap: 12px; }
+    .pb-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(52,128,153,0.25); border: 1px solid rgba(52,128,153,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 14px; color: var(--auriu); flex-shrink: 0;
+    }
+    .pb-nume { font-size: 14px; color: var(--alb); font-weight: 500; }
+    .pb-cod  { font-size: 11px; color: var(--text-gri); letter-spacing: 1px; margin-top: 2px; }
+
+    .gol { text-align: center; padding: 65px 20px; }
+    .gol h3 { font-family: var(--font-display); font-size: 22px; color: var(--alb); margin: 12px 0 8px; }
+    .gol p  { color: var(--text-secundar); font-size: 14px; margin-bottom: 24px; }
+
+    .setare-bloc {
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 14px;
+    }
+    .setare-titlu {
+      font-family: var(--font-display); font-size: 20px; color: var(--alb);
+      margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+
+    @media(max-width:600px) {
+      .wallet-top { flex-direction: column; align-items: flex-start; }
+      .pb-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-titlu">ELPIS</span>
+    <span class="nav-logo-sub">Trupa de Teatru · Constanța</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Acasă</a></li>
+    <li><a href="spectacole.html">Spectacole</a></li>
+    <li><a href="despre.html">Despre noi</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-actiuni">
+    <a href="#" id="btn-logout" class="btn btn-ghost">Ieși din cont</a>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="wallet-header">
+  <div class="wallet-top">
+    <div>
+      <span class="eyebrow">Wallet</span>
+      <h1 id="w-nume" style="font-size:clamp(24px,4vw,42px)">Bun venit!</h1>
+      <p id="w-email" style="color:var(--text-secundar);margin-top:4px;font-size:14px"></p>
+    </div>
+    <div class="wallet-stats">
+      <div class="wstat"><span class="wstat-nr" id="s-active">—</span><span class="wstat-label">Rezervări active</span></div>
+      <div class="wstat"><span class="wstat-nr" id="s-bilete">—</span><span class="wstat-label">Bilete totale</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wallet-body">
+  <div class="tab-uri">
+    <button class="tab activ" onclick="schimbaTab('active',this)">Rezervări active</button>
+    <button class="tab" onclick="schimbaTab('istorice',this)">Istoric</button>
+    <button class="tab" onclick="schimbaTab('setari',this)">Setări cont</button>
+  </div>
+  <div id="tab-active"></div>
+  <div id="tab-istorice" style="display:none"></div>
+  <div id="tab-setari" style="display:none"></div>
+</div>
+
+<!-- Modal anulare -->
+<div class="modal-overlay" id="modal-anulare">
+  <div class="modal" style="max-width:400px">
+    <button class="modal-inchide" onclick="document.getElementById('modal-anulare').classList.remove('activ')">✕</button>
+    <span class="eyebrow">Confirmare</span>
+    <h2 class="modal-titlu">Anulezi rezervarea?</h2>
+    <p class="modal-sub" id="anulare-desc">Biletele vor fi eliberate.</p>
+    <div style="display:flex;gap:12px;margin-top:22px">
+      <button class="btn btn-ghost" style="flex:1" onclick="document.getElementById('modal-anulare').classList.remove('activ')">Nu, păstrează</button>
+      <button class="btn btn-pericol" style="flex:1" id="btn-anulare-ok">Da, anulează</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script>
+if (!auth.esteLogat()) { window.location.href = '../index.html'; }
+
+let rezervari = [], idAnulare = null;
+
+async function incarcaWallet() {
+  const user = auth.getUser();
+  document.getElementById('w-nume').textContent = `${user?.prenume || ''} ${user?.nume || ''}`.trim() || 'Utilizator';
+  document.getElementById('w-email').textContent = user?.email || '';
+  try {
+    const d = await api.get('/rezervari/ale-mele');
+    rezervari = d.rezervari;
+    const active = rezervari.filter(r => r.status === 'activa' && !esteInTrecut(r.spectacol?.data));
+    const totalBilete = active.reduce((s, r) => s + r.nrBilete, 0);
+    document.getElementById('s-active').textContent = active.length;
+    document.getElementById('s-bilete').textContent = totalBilete;
+    randeazaActive();
+    randeazaIstorice();
+  } catch(e) { toast.eroare('Nu s-au putut încărca rezervările.'); }
+}
+
+function cardRezervare(r, istoric) {
+  const trecut = esteInTrecut(r.spectacol?.data);
+  const anulat = r.status === 'anulata';
+  const badge  = anulat
+    ? '<span class="badge badge-anulat">Anulat</span>'
+    : trecut ? '<span class="badge badge-trecut">Trecut</span>'
+    : '<span class="badge badge-activ">Activ</span>';
+
+  const participantiHTML = (r.participanti || []).map((p, i) => {
+    const init    = `${(p.prenume||'?')[0]}${(p.nume||'?')[0]}`.toUpperCase();
+    const biletId = p.bilet?._id || p.bilet;
+    const codUnic = p.bilet?.codUnic || '—';
+    const pdfBtn  = (biletId && !anulat)
+      ? `<a href="${API_URL}/bilete/pdf/${biletId}" target="_blank" class="btn btn-secundar" style="padding:6px 14px;font-size:10px">⬇ Bilet PDF</a>`
+      : '';
+    return `<div class="pb-row">
+      <div class="pb-stanga">
+        <div class="pb-avatar">${init}</div>
+        <div>
+          <div class="pb-nume">${p.prenume} ${p.nume}</div>
+          <div class="pb-cod">QR: ${codUnic}</div>
+        </div>
+      </div>
+      <div>${pdfBtn}</div>
+    </div>`;
+  }).join('');
+
+  const btnAnulare = (!anulat && !trecut && !istoric)
+    ? `<button class="btn btn-pericol" style="padding:7px 14px;font-size:10px"
+        onclick="initiazaAnulare('${r._id}','${r.spectacol?.titlu?.replace(/'/g,"\\'")}',${r.nrBilete})">
+        Anulează
+      </button>`
+    : '';
+
+  return `<div class="rez-card ${anulat?'anulat':''}" id="rc-${r._id}">
+    <div class="rez-header" onclick="toggleCard('${r._id}')">
+      <div>
+        <h3>${r.spectacol?.titlu || 'Spectacol'}</h3>
+        <p>📅 ${r.spectacol?.data ? formateazaData(r.spectacol.data) : '—'}
+           · 🕐 ${r.spectacol?.data ? formateazaOra(r.spectacol.data) : ''}<br>
+           🎟️ ${r.nrBilete} bilet${r.nrBilete > 1 ? 'e' : ''}
+           · Cod rezervare: <strong style="color:var(--auriu)">#${r._id.slice(-8).toUpperCase()}</strong>
+        </p>
+      </div>
+      <div class="rez-header-dx">
+        ${badge}
+        ${btnAnulare}
+        <span class="rez-chevron">▾</span>
+      </div>
+    </div>
+    <div class="rez-body">${participantiHTML}</div>
+  </div>`;
+}
+
+function randeazaActive() {
+  const c = document.getElementById('tab-active');
+  const lista = rezervari.filter(r => r.status === 'activa' && !esteInTrecut(r.spectacol?.data));
+  if (!lista.length) {
+    c.innerHTML = `<div class="gol">
+      <div style="font-size:42px;opacity:.3">🎭</div>
+      <h3>Nicio rezervare activă</h3>
+      <p>Nu ai bilete rezervate momentan.</p>
+      <a href="spectacole.html" class="btn btn-primar">Vezi spectacolele →</a>
+    </div>`;
+    return;
+  }
+  c.innerHTML = lista.map(r => cardRezervare(r, false)).join('');
+}
+
+function randeazaIstorice() {
+  const c = document.getElementById('tab-istorice');
+  const lista = rezervari.filter(r => r.status === 'anulata' || esteInTrecut(r.spectacol?.data));
+  if (!lista.length) {
+    c.innerHTML = '<div class="gol"><p>Nu există rezervări în istoric.</p></div>';
+    return;
+  }
+  c.innerHTML = lista.map(r => cardRezervare(r, true)).join('');
+}
+
+function toggleCard(id) {
+  document.getElementById(`rc-${id}`)?.classList.toggle('deschis');
+}
+
+function schimbaTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('activ'));
+  btn.classList.add('activ');
+  ['active','istorice','setari'].forEach(t => { document.getElementById(`tab-${t}`).style.display = 'none'; });
+  document.getElementById(`tab-${tab}`).style.display = 'block';
+  if (tab === 'setari') randeazaSetari();
+}
+
+function randeazaSetari() {
+  const user = auth.getUser();
+  document.getElementById('tab-setari').innerHTML = `
+    <div class="setare-bloc">
+      <h3 class="setare-titlu">Informații cont</h3>
+      <p style="color:var(--text-secundar);font-size:14px;margin-bottom:6px">
+        <strong style="color:var(--alb)">Nume:</strong> ${user?.prenume} ${user?.nume}
+      </p>
+      <p style="color:var(--text-secundar);font-size:14px">
+        <strong style="color:var(--alb)">Email:</strong> ${user?.email}
+      </p>
+    </div>
+    <div class="setare-bloc">
+      <h3 class="setare-titlu">Schimbă parola</h3>
+      <form id="fm-parola">
+        <div class="form-grup"><label>Parola curentă</label><input type="password" id="p-veche" placeholder="••••••••" required></div>
+        <div class="form-grup"><label>Parola nouă (min. 8 caractere)</label><input type="password" id="p-noua" placeholder="••••••••" required></div>
+        <button type="submit" class="btn btn-primar">Schimbă parola</button>
+      </form>
+    </div>
+    <div class="setare-bloc" style="border-color:rgba(231,76,60,0.25)">
+      <h3 class="setare-titlu" style="color:var(--rosu)">Ieșire din cont</h3>
+      <p style="color:var(--text-secundar);font-size:13px;margin-bottom:14px">Te vei deconecta de pe acest dispozitiv.</p>
+      <button class="btn btn-pericol" onclick="auth.logout()">Ieși din cont</button>
+    </div>`;
+
+  document.getElementById('fm-parola')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    try {
+      await api.put('/user/schimba-parola', {
+        parolaVeche: document.getElementById('p-veche').value,
+        parolaNoua:  document.getElementById('p-noua').value
+      });
+      toast.succes('Parola schimbată cu succes!');
+      document.getElementById('fm-parola').reset();
+    } catch(err) { toast.eroare(err.message); }
+  });
+}
+
+function initiazaAnulare(id, titlu, nr) {
+  idAnulare = id;
+  document.getElementById('anulare-desc').textContent =
+    `Anulezi "${titlu}" (${nr} bilet${nr > 1 ? 'e' : ''})? Biletele vor fi eliberate.`;
+  document.getElementById('modal-anulare').classList.add('activ');
+}
+
+document.getElementById('btn-anulare-ok')?.addEventListener('click', async () => {
+  if (!idAnulare) return;
+  const btn = document.getElementById('btn-anulare-ok');
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  try {
+    const d = await api.delete(`/rezervari/${idAnulare}`);
+    document.getElementById('modal-anulare').classList.remove('activ');
+    toast.succes(d.message); idAnulare = null;
+    await incarcaWallet();
+  } catch(err) { toast.eroare(err.message); btn.textContent = 'Da, anulează'; btn.disabled = false; }
+});
+
+document.getElementById('modal-anulare')?.addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('activ');
+});
+
+document.addEventListener('DOMContentLoaded', incarcaWallet);
+</script>
+</body>
+</html>

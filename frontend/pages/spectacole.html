@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spectacole — Trupa de Teatru Elpis</title>
+  <link rel="stylesheet" href="../css/stil.css">
+  <style>
+    .spectacole-wrap { max-width: 1200px; margin: 0 auto; padding: 50px 5%; }
+    .spectacole-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px,1fr)); gap: 24px; }
+
+    /* Formular rezervare */
+    .rez-info { background: rgba(255,255,255,0.08); border: 1px solid var(--border-auriu); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 22px; }
+    .rez-titlu { font-family: var(--font-display); font-size: 22px; color: var(--alb); margin-bottom: 8px; }
+    .rez-meta { color: var(--text-secundar); font-size: 13px; line-height: 1.9; }
+    .rez-disp { color: var(--auriu); font-weight: 600; font-size: 14px; }
+
+    .nr-control { display: flex; align-items: center; gap: 16px; margin-top: 6px; }
+    .nr-btn {
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+      color: var(--alb); font-size: 20px; cursor: pointer; border-radius: var(--radius); transition: var(--tranzitie);
+    }
+    .nr-btn:hover { border-color: var(--auriu); color: var(--auriu); }
+    .nr-val { font-family: var(--font-display); font-size: 36px; color: var(--auriu); min-width: 44px; text-align: center; line-height: 1; }
+
+    .participant-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; }
+    .participant-titlu { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--auriu); margin-bottom: 10px; display: block; }
+    .participant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .participant-grid .form-grup { margin-bottom: 0; }
+
+    .gol { text-align: center; padding: 60px 20px; color: var(--text-secundar); grid-column: 1/-1; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-titlu">ELPIS</span>
+    <span class="nav-logo-sub">Trupa de Teatru · Constanța</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Acasă</a></li>
+    <li><a href="spectacole.html">Spectacole</a></li>
+    <li><a href="despre.html">Despre noi</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-actiuni">
+    <a href="#" id="btn-wallet" class="btn-icon btn-icon-wallet" style="display:none" title="Biletele mele">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><path d="M2 10h20"/></svg>
+      Wallet
+    </a>
+    <a href="#" id="btn-auth" class="btn btn-secundar">Intră în cont</a>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="eyebrow">Stagiunea curentă</span>
+  <h1>Spectacolele <em>noastre</em></h1>
+  <p>Selectează un spectacol și rezervă-ți locul</p>
+</div>
+
+<div class="spectacole-wrap">
+  <div class="spectacole-grid" id="grid">
+    <div class="gol"><span class="spinner"></span> Se încarcă spectacolele...</div>
+  </div>
+</div>
+
+<!-- Modal rezervare -->
+<div class="modal-overlay" id="modal-rez">
+  <div class="modal modal-larg">
+    <button class="modal-inchide" onclick="inchideRez()">✕</button>
+    <span class="eyebrow">Rezervare bilete</span>
+    <div id="rez-continut"></div>
+  </div>
+</div>
+
+<!-- Modal auth -->
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal"><button class="modal-inchide" onclick="inchideModal()">✕</button><div id="modal-continut"></div></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-titlu">ELPIS</div><p>Trupa de Teatru Elpis Constanța.</p></div>
+    <div><span class="footer-sectiune-titlu">Navigare</span><ul class="footer-links"><li><a href="../index.html">Acasă</a></li><li><a href="spectacole.html">Spectacole</a></li><li><a href="despre.html">Despre noi</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><span class="footer-sectiune-titlu">Contact</span><ul class="footer-links"><li><a href="mailto:contact@elpis.ro">contact@elpis.ro</a></li><li><a href="tel:+40241000000">0241 000 000</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">© 2024 Trupa de Teatru Elpis Constanța.</div>
+</footer>
+
+<script src="../js/app.js"></script>
+<script>
+let toate = [], selectat = null, nrBilete = 1;
+
+async function incarca() {
+  try {
+    const d = await api.get('/spectacole');
+    toate = d.spectacole;
+    randeaza(toate);
+  } catch(e) {
+    document.getElementById('grid').innerHTML = '<div class="gol">Nu s-au putut încărca spectacolele.</div>';
+  }
+}
+
+function randeaza(lista) {
+  const g = document.getElementById('grid');
+  if (!lista.length) { g.innerHTML = '<div class="gol">Nu există spectacole disponibile momentan.</div>'; return; }
+  g.innerHTML = lista.map(s => {
+    const trecut  = esteInTrecut(s.data);
+    const complet = s.nrBileteDisponibile === 0;
+    const cls     = trecut || complet ? 'complet' : '';
+    const actiune = (!trecut && !complet)
+      ? `<button class="btn btn-primar" style="padding:8px 16px;font-size:10px" onclick="deschideRez('${s._id}')">Rezervă →</button>`
+      : trecut ? '<span class="badge badge-trecut">Trecut</span>' : '<span class="badge badge-complet">Complet</span>';
+    return `<div class="card-spectacol ${cls}">
+      <img class="card-imagine" src="${s.imagine||''}" alt="${s.titlu}"
+        onerror="this.style.background='var(--albastru-card)';this.style.height='160px';this.removeAttribute('src')">
+      <div class="card-corp">
+        <span class="card-gen">${s.gen}</span>
+        <h3 class="card-titlu">${s.titlu}</h3>
+        <p class="card-meta">
+          📅 ${formateazaData(s.data)}<br>
+          🕐 ${formateazaOra(s.data)} · 🎭 ${s.sala} · ⏱ ${s.durata} min
+          ${s.regizor ? `<br>🎬 Regia: ${s.regizor}` : ''}
+        </p>
+        <p style="color:var(--text-secundar);font-size:13px;line-height:1.6;margin:10px 0">${s.descriere.slice(0,130)}...</p>
+        <div class="card-footer">
+          <span class="bilete-info"><span class="bilete-nr">${s.nrBileteDisponibile}</span> / ${s.nrTotalBilete} disponibile</span>
+          ${actiune}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deschideRez(id) {
+  if (!auth.esteLogat()) { deschideModal('login'); toast.info('Trebuie să fii logat pentru a rezerva.'); return; }
+  selectat = toate.find(s => s._id === id);
+  nrBilete = 1;
+  randeazaRez();
+  document.getElementById('modal-rez').classList.add('activ');
+}
+function inchideRez() { document.getElementById('modal-rez').classList.remove('activ'); selectat = null; }
+
+function randeazaRez() {
+  if (!selectat) return;
+  const s = selectat;
+  const max = Math.min(10, s.nrBileteDisponibile);
+  document.getElementById('rez-continut').innerHTML = `
+    <div class="rez-info">
+      <p class="rez-titlu">${s.titlu}</p>
+      <p class="rez-meta">
+        📅 ${formateazaData(s.data)}<br>
+        🕐 ${formateazaOra(s.data)} · 🎭 ${s.sala} · ⏱ ${s.durata} min<br>
+        <span class="rez-disp">${s.nrBileteDisponibile} bilete disponibile</span>
+      </p>
+    </div>
+    <div class="form-grup">
+      <label>Număr de participanți (max ${max})</label>
+      <div class="nr-control">
+        <button class="nr-btn" onclick="schimbaNr(-1)">−</button>
+        <span class="nr-val" id="nr-val">1</span>
+        <button class="nr-btn" onclick="schimbaNr(1)">+</button>
+      </div>
+    </div>
+    <div id="participanti-lista"></div>
+    <button class="btn btn-primar btn-full" id="btn-rez" onclick="confirmaRez()">Confirmă rezervarea</button>
+    <p style="color:var(--text-secundar);font-size:12px;text-align:center;margin-top:10px">
+      Fiecare participant primește biletul PDF cu QR unic pe emailul tău și în Wallet.
+    </p>`;
+  randeazaParticipanti();
+}
+
+function schimbaNr(d) {
+  const max = Math.min(10, selectat.nrBileteDisponibile);
+  nrBilete = Math.max(1, Math.min(max, nrBilete + d));
+  document.getElementById('nr-val').textContent = nrBilete;
+  randeazaParticipanti();
+}
+
+function randeazaParticipanti() {
+  const c = document.getElementById('participanti-lista');
+  if (!c) return;
+  let html = '';
+  for (let i = 0; i < nrBilete; i++) {
+    html += `<div class="participant-card">
+      <span class="participant-titlu">Participant ${i + 1}</span>
+      <div class="participant-grid">
+        <div class="form-grup"><label>Prenume</label><input type="text" id="p${i}-prenume" placeholder="Ion" required></div>
+        <div class="form-grup"><label>Nume</label><input type="text" id="p${i}-nume" placeholder="Popescu" required></div>
+      </div>
+    </div>`;
+  }
+  c.innerHTML = html;
+}
+
+async function confirmaRez() {
+  const participanti = [];
+  for (let i = 0; i < nrBilete; i++) {
+    const prenume = document.getElementById(`p${i}-prenume`)?.value?.trim();
+    const nume    = document.getElementById(`p${i}-nume`)?.value?.trim();
+    if (!prenume || !nume) { toast.eroare(`Completează numele pentru participantul ${i + 1}.`); return; }
+    participanti.push({ prenume, nume });
+  }
+  const btn = document.getElementById('btn-rez');
+  btn.innerHTML = '<span class="spinner"></span>Se procesează...'; btn.disabled = true;
+  try {
+    await api.post('/rezervari', { spectacolId: selectat._id, participanti });
+    inchideRez();
+    toast.succes(`Rezervare confirmată! ${nrBilete} bilet${nrBilete > 1 ? 'e trimise' : ' trimis'} pe email.`);
+    await incarca();
+  } catch(err) {
+    toast.eroare(err.message); btn.textContent = 'Confirmă rezervarea'; btn.disabled = false;
+  }
+}
+
+document.getElementById('modal-rez')?.addEventListener('click', e => { if (e.target === e.currentTarget) inchideRez(); });
+document.addEventListener('DOMContentLoaded', incarca);
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Trupa de Teatru Elpis</title>
+  <link rel="stylesheet" href="../css/stil.css">
+  <style>
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; max-width: 980px; margin: 0 auto; }
+    .info-item { display: flex; gap: 14px; margin-bottom: 24px; align-items: flex-start; }
+    .info-icon { font-size: 20px; margin-top: 2px; flex-shrink: 0; }
+    .info-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--auriu); margin-bottom: 4px; display: block; }
+    .info-val { color: var(--text-secundar); font-size: 14px; line-height: 1.7; }
+    .info-val a { color: var(--alb); text-decoration: none; transition: var(--tranzitie); }
+    .info-val a:hover { color: var(--auriu); }
+    .interval-tel {
+      display: inline-block; margin-top: 6px;
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25);
+      border-radius: var(--radius); padding: 5px 12px;
+      font-size: 12px; color: var(--auriu); letter-spacing: 1px;
+    }
+    @media(max-width:768px) { .contact-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-titlu">ELPIS</span>
+    <span class="nav-logo-sub">Trupa de Teatru · Constanța</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Acasă</a></li>
+    <li><a href="spectacole.html">Spectacole</a></li>
+    <li><a href="despre.html">Despre noi</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-actiuni">
+    <a href="#" id="btn-wallet" class="btn-icon btn-icon-wallet" style="display:none" title="Biletele mele">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><path d="M2 10h20"/></svg>
+      Wallet
+    </a>
+    <a href="#" id="btn-auth" class="btn btn-secundar">Intră în cont</a>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="eyebrow">Suntem aici</span>
+  <h1>Contactează-<em>ne</em></h1>
+</div>
+
+<section class="sectiune">
+  <div class="contact-grid">
+    <div>
+      <span class="eyebrow">Informații</span>
+      <h2 style="font-size:clamp(24px,3.5vw,36px);margin-bottom:26px">Ia <em>legătura</em> cu noi</h2>
+
+      <div class="info-item">
+        <span class="info-icon">📞</span>
+        <div>
+          <span class="info-label">Telefon</span>
+          <span class="info-val">
+            <a href="tel:+40241000000">0241 000 000</a><br>
+            <span class="interval-tel">Luni – Vineri &nbsp;·&nbsp; 10:00 – 18:00</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <span class="info-icon">✉️</span>
+        <div>
+          <span class="info-label">Email</span>
+          <span class="info-val"><a href="mailto:contact@elpis.ro">contact@elpis.ro</a></span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <span class="info-icon">🎟️</span>
+        <div>
+          <span class="info-label">Rezervări online</span>
+          <span class="info-val">
+            Rezervă bilete direct de pe site, oricând.<br>
+            <a href="spectacole.html" style="color:var(--auriu)">→ Vezi spectacolele disponibile</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <span class="eyebrow">Mesaj</span>
+      <h2 style="font-size:clamp(24px,3.5vw,36px);margin-bottom:26px">Scrie-<em>ne</em></h2>
+      <form id="fm-contact">
+        <div class="form-grup"><label>Numele tău</label><input type="text" placeholder="Ion Popescu" required></div>
+        <div class="form-grup"><label>Email</label><input type="email" placeholder="adresa@email.com" required></div>
+        <div class="form-grup"><label>Subiect</label><input type="text" placeholder="Întrebare despre rezervări..."></div>
+        <div class="form-grup">
+          <label>Mesaj</label>
+          <textarea rows="5" placeholder="Mesajul tău..." required style="resize:vertical"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primar btn-full">Trimite mesajul</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal"><button class="modal-inchide" onclick="inchideModal()">✕</button><div id="modal-continut"></div></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-titlu">ELPIS</div><p>Trupa de Teatru Elpis Constanța.</p></div>
+    <div><span class="footer-sectiune-titlu">Navigare</span><ul class="footer-links"><li><a href="../index.html">Acasă</a></li><li><a href="spectacole.html">Spectacole</a></li><li><a href="despre.html">Despre noi</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><span class="footer-sectiune-titlu">Contact</span><ul class="footer-links"><li><a href="mailto:contact@elpis.ro">contact@elpis.ro</a></li><li><a href="tel:+40241000000">0241 000 000</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">© 2024 Trupa de Teatru Elpis Constanța.</div>
+</footer>
+<script src="../js/app.js"></script>
+<script>
+document.getElementById('fm-contact')?.addEventListener('submit', e => {
+  e.preventDefault();
+  toast.succes('Mesajul a fost trimis! Vă vom contacta în curând.');
+  e.target.reset();
+});
+</script>
+</body>
+</html>
