@@ -1,5 +1,5 @@
 // ── SCHIMBĂ CU URL-UL TĂU DE PE RENDER ──
-const API_URL = 'https://elpis-backend.onrender.com/api';
+const API_URL = 'https://elpis-teatru.onrender.com/api';
 
 // ── TOAST ──
 const toast = {
