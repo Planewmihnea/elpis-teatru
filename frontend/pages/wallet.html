@@ -187,9 +187,9 @@ function cardRezervare(r, istoric) {
     const init    = `${(p.prenume||'?')[0]}${(p.nume||'?')[0]}`.toUpperCase();
     const biletId = p.bilet?._id || p.bilet;
     const codUnic = p.bilet?.codUnic || '—';
-    const pdfBtn  = (biletId && !anulat)
-      ? `<a href="${API_URL}/bilete/pdf/${biletId}" target="_blank" class="btn btn-secundar" style="padding:6px 14px;font-size:10px">⬇ Bilet PDF</a>`
-      : '';
+    const pdfBtn = (biletId && !anulat)
+  ? `<button onclick="descarcaPDF('${biletId}')" class="btn btn-secundar" style="padding:6px 14px;font-size:10px">⬇ Bilet PDF</button>`
+  : '';
     return `<div class="pb-row">
       <div class="pb-stanga">
         <div class="pb-avatar">${init}</div>
@@ -327,7 +327,19 @@ document.getElementById('btn-anulare-ok')?.addEventListener('click', async () =>
 document.getElementById('modal-anulare')?.addEventListener('click', e => {
   if (e.target === e.currentTarget) e.currentTarget.classList.remove('activ');
 });
-
+async function descarcaPDF(biletId) {
+  try {
+    const res = await fetch(`${API_URL}/bilete/pdf/${biletId}`, {
+      headers: { 'Authorization': `Bearer ${auth.getToken()}` }
+    });
+    if (!res.ok) { toast.eroare('Nu s-a putut descărca biletul.'); return; }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `bilet-${biletId}.pdf`;
+    a.click(); URL.revokeObjectURL(url);
+  } catch(e) { toast.eroare('Eroare la descărcare.'); }
+}
 document.addEventListener('DOMContentLoaded', incarcaWallet);
 </script>
 </body>
