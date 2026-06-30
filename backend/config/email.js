@@ -163,10 +163,31 @@ const trimiteResetareParola = async (email, prenume, cod) => {
   });
 };
 
+const trimiteNotificareContact = async (mesaj) => {
+  await sgMail.send({
+    to: process.env.EMAIL_FROM,
+    from: FROM,
+    subject: `Mesaj nou de contact: ${mesaj.subiect || 'Fără subiect'}`,
+    html: shell(`
+      <h2>Mesaj nou primit prin site</h2>
+      <div class="info-box">
+        <div class="info-row"><span class="info-label">Nume</span><span class="info-val">${mesaj.nume}</span></div>
+        <div class="info-row"><span class="info-label">Email</span><span class="info-val">${mesaj.email}</span></div>
+        <div class="info-row"><span class="info-label">Subiect</span><span class="info-val">${mesaj.subiect || '—'}</span></div>
+      </div>
+      <p><strong>Mesaj:</strong></p>
+      <p style="background:#f8f9ff;padding:16px;border-radius:6px;white-space:pre-wrap">${mesaj.mesaj}</p>
+      <p style="color:#888;font-size:12px">Poți răspunde direct la acest email — va ajunge la ${mesaj.email}.</p>
+    `),
+    replyTo: mesaj.email
+  });
+};
+
 module.exports = {
   trimiteVerificare,
   trimiteBunVenit,
   trimiteConfirmareRezervare,
   trimiteAnulare,
-  trimiteResetareParola
+  trimiteResetareParola,
+  trimiteNotificareContact
 };

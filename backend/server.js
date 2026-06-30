@@ -11,6 +11,7 @@ const rezervariRoutes  = require('./routes/rezervari');
 const userRoutes       = require('./routes/user');
 const biletRoutes      = require('./routes/bilete');
 const siteRoutes       = require('./routes/site');
+const contactRoutes    = require('./routes/contact');
 
 const app = express();
 

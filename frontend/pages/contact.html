@@ -116,10 +116,27 @@
 </footer>
 <script src="../js/app.js"></script>
 <script>
-document.getElementById('fm-contact')?.addEventListener('submit', e => {
+document.getElementById('fm-contact')?.addEventListener('submit', async e => {
   e.preventDefault();
-  toast.succes('Mesajul a fost trimis! Vă vom contacta în curând.');
-  e.target.reset();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  
+  const fd = new FormData(e.target);
+  const nume = e.target.querySelector('input[type="text"]').value;
+  const email = e.target.querySelector('input[type="email"]').value;
+  const inputs = e.target.querySelectorAll('input[type="text"]');
+  const subiect = inputs[1] ? inputs[1].value : '';
+  const mesaj = e.target.querySelector('textarea').value;
+
+  try {
+    await api.post('/contact', { nume, email, subiect, mesaj });
+    toast.succes('Mesajul a fost trimis! Vă vom contacta în curând.');
+    e.target.reset();
+  } catch(err) {
+    toast.eroare(err.message);
+  } finally {
+    btn.disabled = false;
+  }
 });
 </script>
 </body>
