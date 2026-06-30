@@ -14,6 +14,7 @@ const siteRoutes       = require('./routes/site');
 const contactRoutes    = require('./routes/contact');
 
 const app = express();
+app.set('trust proxy', 1);
 
 app.use(helmet());
 app.use(cors({
@@ -37,7 +38,7 @@ app.use('/api/rezervari',  rezervariRoutes);
 app.use('/api/user',       userRoutes);
 app.use('/api/bilete',     biletRoutes);
 app.use('/api/site',       siteRoutes);
-
+app.use('/api/contact',    contactRoutes);
 // Health check pentru UptimeRobot
 app.get('/ping', (req, res) => res.json({ status: 'online' }));
 
