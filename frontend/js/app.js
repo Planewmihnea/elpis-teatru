@@ -245,7 +245,7 @@ function atasaEventuri() {
       });
       emailVerif = document.getElementById('r-email').value.trim();
       setStare('verifica');
-      toast.info('Cont creat! Verifică emailul pentru codul de 6 cifre.');
+     toast.info('Cont creat! Verifică emailul pentru codul de 6 cifre. Nu ați primit e-mailul? Verificați și folderul Spam, deoarece este posibil să fi ajuns acolo.');
     } catch (err) {
       toast.eroare(err.message); btn.textContent = 'Creează cont'; btn.disabled = false;
     }
@@ -275,7 +275,7 @@ function atasaEventuri() {
     try {
       await api.post('/auth/am-uitat-parola', { email: emailVerif });
       setStare('reset-cod');
-      toast.info('Dacă emailul există, vei primi un cod.');
+      toast.info('Dacă emailul există, vei primi un cod. Nu ați primit e-mailul? Verificați și folderul Spam, deoarece este posibil să fi ajuns acolo.');
     } catch (err) { toast.eroare(err.message); }
   });
 

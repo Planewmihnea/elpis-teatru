@@ -207,7 +207,7 @@ async function confirmaRez() {
   try {
     await api.post('/rezervari', { spectacolId: selectat._id, participanti });
     inchideRez();
-    toast.succes(`Rezervare confirmată! ${nrBilete} bilet${nrBilete > 1 ? 'e trimise' : ' trimis'} pe email.`);
+    toast.succes(`Rezervare confirmată! ${nrBilete} bilet${nrBilete > 1 ? 'e trimise' : ' trimis'} pe email. Nu ați primit e-mailul? Verificați și folderul Spam, deoarece este posibil să fi ajuns acolo.`);
     await incarca();
   } catch(err) {
     toast.eroare(err.message); btn.textContent = 'Confirmă rezervarea'; btn.disabled = false;
