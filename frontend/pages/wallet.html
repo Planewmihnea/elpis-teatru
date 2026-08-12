@@ -19,7 +19,7 @@
       text-align: center; padding: 14px 22px;
       background: rgba(255,255,255,0.08);
       border: 1px solid var(--border-auriu); border-radius: var(--radius);
-    }
+      }
     .wstat-nr { font-family: var(--font-display); font-size: 32px; color: var(--auriu); display: block; line-height: 1; }
     .wstat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secundar); margin-top: 4px; display: block; }
 
@@ -291,6 +291,14 @@ function randeazaSetari() {
       <p style="color:var(--text-secundar);font-size:13px;margin-bottom:14px">Te vei deconecta de pe acest dispozitiv.</p>
       <button class="btn btn-pericol" onclick="auth.logout()">Ieși din cont</button>
     </div>`;
+    <div class="setare-bloc" style="border-color:rgba(231,76,60,0.4);margin-top:8px">
+  <h3 class="setare-titlu" style="color:var(--rosu)">Șterge contul</h3>
+  <p style="color:var(--text-secundar);font-size:13px;margin-bottom:14px">
+    Această acțiune este <strong style="color:var(--rosu)">ireversibilă</strong>. 
+    Toate rezervările și biletele tale vor fi șterse permanent.
+  </p>
+  <button class="btn btn-pericol" onclick="deschideModalStergere()">Șterge contul permanent</button>
+</div>
 
   document.getElementById('fm-parola')?.addEventListener('submit', async e => {
     e.preventDefault();
@@ -340,7 +348,42 @@ async function descarcaPDF(biletId) {
     a.click(); URL.revokeObjectURL(url);
   } catch(e) { toast.eroare('Eroare la descărcare.'); }
 }
+function deschideModalStergere() {
+  document.getElementById('modal-stergere').classList.add('activ');
+}
+
+document.getElementById('btn-stergere-ok')?.addEventListener('click', async () => {
+  const parola = document.getElementById('stergere-parola').value;
+  if (!parola) { toast.eroare('Introdu parola pentru confirmare.'); return; }
+  const btn = document.getElementById('btn-stergere-ok');
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  try {
+    await api.delete(`/user/sterge-cont?parola=${encodeURIComponent(parola)}`);
+    toast.succes('Contul a fost șters.');
+    setTimeout(() => auth.logout(), 1500);
+  } catch(err) {
+    toast.eroare(err.message);
+    btn.textContent = 'Șterge definitiv'; btn.disabled = false;
+  }
+});
 document.addEventListener('DOMContentLoaded', incarcaWallet);
+
 </script>
+<div class="modal-overlay" id="modal-stergere">
+  <div class="modal" style="max-width:400px">
+    <button class="modal-inchide" onclick="document.getElementById('modal-stergere').classList.remove('activ')">✕</button>
+    <span class="eyebrow">Acțiune ireversibilă</span>
+    <h2 class="modal-titlu" style="color:var(--rosu)">Șterge contul?</h2>
+    <p class="modal-sub">Introdu parola pentru a confirma. Toate datele vor fi șterse permanent.</p>
+    <div class="form-grup">
+      <label>Parola ta</label>
+      <input type="password" id="stergere-parola" placeholder="••••••••">
+    </div>
+    <div style="display:flex;gap:12px;margin-top:16px">
+      <button class="btn btn-ghost" style="flex:1" onclick="document.getElementById('modal-stergere').classList.remove('activ')">Anulează</button>
+      <button class="btn btn-pericol" style="flex:1" id="btn-stergere-ok">Șterge definitiv</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

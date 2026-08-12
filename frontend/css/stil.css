@@ -101,7 +101,72 @@ nav {
 .nav-links a:hover, .nav-links a.activ { color: var(--auriu); }
 .nav-links a:hover::after, .nav-links a.activ::after { width: 100%; }
 
-.nav-actiuni { display: flex; align-items: center; gap: 10px; }
+.nav-actiuni {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Buton Login */
+.btn-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--auriu);
+  color: var(--auriu);
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: var(--tranzitie);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-login:hover {
+  background: var(--auriu);
+  color: var(--albastru-dark);
+}
+
+/* Profil utilizator logat */
+.nav-profil {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.2);
+  border: 1px solid var(--auriu);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--auriu);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.nav-prenume {
+  font-size: 12px;
+  color: var(--alb);
+  font-family: var(--font-body);
+  letter-spacing: 1px;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .nav-prenume { display: none; }
+  .btn-login span { display: none; }
+}
 .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
 .nav-hamburger span { width: 24px; height: 1px; background: var(--alb); display: block; transition: var(--tranzitie); }
 

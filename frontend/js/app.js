@@ -84,7 +84,46 @@ function initNav() {
     if (href && cale.endsWith(href)) a.classList.add('activ');
   });
 
-  actualizeazaNav();
+  function actualizeazaNav() {
+  const btnAuth   = document.getElementById('btn-auth');
+  const walletBtn = document.getElementById('btn-wallet');
+  const inPages   = window.location.pathname.includes('/pages/');
+  const walletHref = inPages ? 'wallet.html' : 'pages/wallet.html';
+
+  if (auth.esteLogat()) {
+    const user = auth.getUser();
+    const initial = (user?.prenume || '?')[0].toUpperCase();
+
+    // Înlocuiește butonul auth cu profil
+    if (btnAuth) {
+      btnAuth.outerHTML = `
+        <div class="nav-profil" id="nav-profil">
+          <div class="nav-avatar">${initial}</div>
+          <span class="nav-prenume">${user?.prenume || ''}</span>
+        </div>`;
+    }
+
+    // Buton wallet
+    if (walletBtn) {
+      walletBtn.href = walletHref;
+      walletBtn.style.display = 'inline-flex';
+    }
+  } else {
+    // Buton login elegant
+    if (btnAuth) {
+      btnAuth.className = 'btn-login';
+      btnAuth.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Log In</span>`;
+      btnAuth.href = '#';
+      btnAuth.onclick = (e) => { e.preventDefault(); deschideModal('login'); };
+    }
+    if (walletBtn) walletBtn.style.display = 'none';
+  }
+}
 }
 
 function actualizeazaNav() {
