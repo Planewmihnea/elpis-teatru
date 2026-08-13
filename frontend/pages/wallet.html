@@ -266,7 +266,26 @@ function schimbaTab(tab, btn) {
   if (tab === 'setari') randeazaSetari();
 }
 
-function randeazaSetari() {
+
+
+function initiazaAnulare(id, titlu, nr) {
+  idAnulare = id;
+  document.getElementById('anulare-desc').textContent =
+    `Anulezi "${titlu}" (${nr} bilet${nr > 1 ? 'e' : ''})? Biletele vor fi eliberate.`;
+  document.getElementById('modal-anulare').classList.add('activ');
+}
+
+document.getElementById('btn-anulare-ok')?.addEventListener('click', async () => {
+  if (!idAnulare) return;
+  const btn = document.getElementById('btn-anulare-ok');
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  try {
+    const d = await api.delete(`/rezervari/${idAnulare}`);
+    document.getElementById('modal-anulare').classList.remove('activ');
+    toast.succes(d.message); idAnulare = null;
+    await incarcaWallet();
+  } catch(err) { toast.eroare(err.message); btn.textContent = 'Da, anulează'; btn.disabled = false; }
+});function randeazaSetari() {
   const user = auth.getUser();
   document.getElementById('tab-setari').innerHTML = `
     <div class="setare-bloc">
@@ -290,15 +309,15 @@ function randeazaSetari() {
       <h3 class="setare-titlu" style="color:var(--rosu)">Ieșire din cont</h3>
       <p style="color:var(--text-secundar);font-size:13px;margin-bottom:14px">Te vei deconecta de pe acest dispozitiv.</p>
       <button class="btn btn-pericol" onclick="auth.logout()">Ieși din cont</button>
-    </div>`;
+    </div>
     <div class="setare-bloc" style="border-color:rgba(231,76,60,0.4);margin-top:8px">
-  <h3 class="setare-titlu" style="color:var(--rosu)">Șterge contul</h3>
-  <p style="color:var(--text-secundar);font-size:13px;margin-bottom:14px">
-    Această acțiune este <strong style="color:var(--rosu)">ireversibilă</strong>. 
-    Toate rezervările și biletele tale vor fi șterse permanent.
-  </p>
-  <button class="btn btn-pericol" onclick="deschideModalStergere()">Șterge contul permanent</button>
-</div>
+      <h3 class="setare-titlu" style="color:var(--rosu)">Șterge contul</h3>
+      <p style="color:var(--text-secundar);font-size:13px;margin-bottom:14px">
+        Această acțiune este <strong style="color:var(--rosu)">ireversibilă</strong>. 
+        Toate rezervările și biletele tale vor fi șterse permanent.
+      </p>
+      <button class="btn btn-pericol" onclick="deschideModalStergere()">Șterge contul permanent</button>
+    </div>`;
 
   document.getElementById('fm-parola')?.addEventListener('submit', async e => {
     e.preventDefault();
@@ -312,25 +331,6 @@ function randeazaSetari() {
     } catch(err) { toast.eroare(err.message); }
   });
 }
-
-function initiazaAnulare(id, titlu, nr) {
-  idAnulare = id;
-  document.getElementById('anulare-desc').textContent =
-    `Anulezi "${titlu}" (${nr} bilet${nr > 1 ? 'e' : ''})? Biletele vor fi eliberate.`;
-  document.getElementById('modal-anulare').classList.add('activ');
-}
-
-document.getElementById('btn-anulare-ok')?.addEventListener('click', async () => {
-  if (!idAnulare) return;
-  const btn = document.getElementById('btn-anulare-ok');
-  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
-  try {
-    const d = await api.delete(`/rezervari/${idAnulare}`);
-    document.getElementById('modal-anulare').classList.remove('activ');
-    toast.succes(d.message); idAnulare = null;
-    await incarcaWallet();
-  } catch(err) { toast.eroare(err.message); btn.textContent = 'Da, anulează'; btn.disabled = false; }
-});
 
 document.getElementById('modal-anulare')?.addEventListener('click', e => {
   if (e.target === e.currentTarget) e.currentTarget.classList.remove('activ');
