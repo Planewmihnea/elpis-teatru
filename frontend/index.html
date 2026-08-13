@@ -223,7 +223,10 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">© 2026 Trupa de Teatru Elpis Constanța. Toate drepturile rezervate.</div>
+  <div class="footer-bottom">
+  © 2026 Trupa de Teatru Elpis Constanța. · 
+  <a href="pages/termeni.html" style="color:var(--text-gri);text-decoration:none">Termeni și Condiții</a>
+</div>
 </footer>
 
 <script src="js/cortina.js"></script>
@@ -324,6 +327,30 @@ async function incarcaFeatured() {
 }
 
 document.addEventListener('DOMContentLoaded', incarcaFeatured);
+</script>
+<!-- Banner Termeni -->
+<div id="banner-termeni" style="
+  position:fixed; bottom:0; left:0; right:0; z-index:8000;
+  background:var(--albastru-dark); border-top:1px solid var(--border-auriu);
+  padding:16px 5%; display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:12px;">
+  <p style="color:var(--text-secundar);font-size:13px;margin:0">
+    Prin utilizarea acestui site ești de acord cu 
+    <a href="pages/termeni.html" style="color:var(--auriu)">Termenii și Condițiile</a> noastre.
+  </p>
+  <button onclick="acceptaTermeni()" class="btn btn-primar" style="padding:8px 20px;font-size:11px">
+    Am înțeles
+  </button>
+</div>
+
+<script>
+function acceptaTermeni() {
+  localStorage.setItem('elpis_termeni', '1');
+  document.getElementById('banner-termeni').style.display = 'none';
+}
+if (localStorage.getItem('elpis_termeni')) {
+  document.getElementById('banner-termeni').style.display = 'none';
+}
 </script>
 </body>
 </html>
