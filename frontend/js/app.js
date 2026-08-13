@@ -71,20 +71,8 @@ const api = {
   delete: (u)    => api.cerere(u, { method: 'DELETE' }),
 };
 
-// ── NAVIGARE ──
-function initNav() {
-  document.getElementById('hamburger')?.addEventListener('click', () => {
-    document.querySelector('.nav-links')?.classList.toggle('deschis');
-  });
-
-  // Marchează pagina activă
-  const cale = window.location.pathname;
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    const href = (a.getAttribute('href') || '').replace(/^\.\.\//, '').replace(/^\.\//, '');
-    if (href && cale.endsWith(href)) a.classList.add('activ');
-  });
-
-  function actualizeazaNav() {
+// ── ACTUALIZARE NAV ──
+function actualizeazaNav() {
   const btnAuth   = document.getElementById('btn-auth');
   const walletBtn = document.getElementById('btn-wallet');
   const inPages   = window.location.pathname.includes('/pages/');
@@ -94,7 +82,6 @@ function initNav() {
     const user = auth.getUser();
     const initial = (user?.prenume || '?')[0].toUpperCase();
 
-    // Înlocuiește butonul auth cu profil
     if (btnAuth) {
       btnAuth.outerHTML = `
         <div class="nav-profil" id="nav-profil">
@@ -103,13 +90,11 @@ function initNav() {
         </div>`;
     }
 
-    // Buton wallet
     if (walletBtn) {
       walletBtn.href = walletHref;
       walletBtn.style.display = 'inline-flex';
     }
   } else {
-    // Buton login elegant
     if (btnAuth) {
       btnAuth.className = 'btn-login';
       btnAuth.innerHTML = `
@@ -118,41 +103,27 @@ function initNav() {
           <circle cx="12" cy="7" r="4"/>
         </svg>
         <span>Log In</span>`;
-      btnAuth.href = '#';
-      btnAuth.onclick = (e) => { e.preventDefault(); deschideModal('login'); };
+      btnAuth.removeAttribute('href');
+btnAuth.style.cursor = 'pointer';
+btnAuth.onclick = (e) => { e.preventDefault(); deschideModal('login'); };
     }
     if (walletBtn) walletBtn.style.display = 'none';
   }
 }
-}
 
-function actualizeazaNav() {
-  const btnAuth   = document.getElementById('btn-auth');
-  const walletBtn = document.getElementById('btn-wallet');
-  const inPages   = window.location.pathname.includes('/pages/');
-  const walletHref = inPages ? 'wallet.html' : 'pages/wallet.html';
+// ── NAVIGARE ──
+function initNav() {
+  document.getElementById('hamburger')?.addEventListener('click', () => {
+    document.querySelector('.nav-links')?.classList.toggle('deschis');
+  });
 
-  if (auth.esteLogat()) {
-    const user = auth.getUser();
-    // Buton cont
-    if (btnAuth) {
-      btnAuth.textContent = user?.prenume || 'Cont';
-      btnAuth.href = walletHref;
-      btnAuth.onclick = null;
-    }
-    // Buton wallet (iconița portofel)
-    if (walletBtn) {
-      walletBtn.href = walletHref;
-      walletBtn.style.display = 'inline-flex';
-    }
-  } else {
-    if (btnAuth) {
-      btnAuth.textContent = 'Intră în cont';
-      btnAuth.href = '#';
-      btnAuth.onclick = (e) => { e.preventDefault(); deschideModal('login'); };
-    }
-    if (walletBtn) walletBtn.style.display = 'none';
-  }
+  const cale = window.location.pathname;
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    const href = (a.getAttribute('href') || '').replace(/^\.\.\//, '').replace(/^\.\//, '');
+    if (href && cale.endsWith(href)) a.classList.add('activ');
+  });
+
+  actualizeazaNav();
 }
 
 // ── MODAL AUTH ──
@@ -284,7 +255,7 @@ function atasaEventuri() {
       });
       emailVerif = document.getElementById('r-email').value.trim();
       setStare('verifica');
-     toast.info('Cont creat! Verifică emailul pentru codul de 6 cifre. Nu ați primit e-mailul? Verificați și folderul Spam, deoarece este posibil să fi ajuns acolo.');
+      toast.info('Cont creat! Verifică emailul pentru codul de 6 cifre. Nu ați primit e-mailul? Verificați și folderul Spam, deoarece este posibil să fi ajuns acolo.');
     } catch (err) {
       toast.eroare(err.message); btn.textContent = 'Creează cont'; btn.disabled = false;
     }
@@ -333,7 +304,10 @@ function atasaEventuri() {
 }
 
 async function retrimiteCod() {
-  try { await api.post('/auth/retrimite-cod', { email: emailVerif }); toast.succes('Cod nou trimis!'); }
+  try {
+    await api.post('/auth/retrimite-cod', { email: emailVerif });
+    toast.succes('Cod nou trimis! Nu ați primit e-mailul? Verificați și folderul Spam, deoarece este posibil să fi ajuns acolo.');
+  }
   catch (err) { toast.eroare(err.message); }
 }
 
