@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politica de Confidențialitate — Trupa de Teatru Elpis</title>
+  <link rel="stylesheet" href="../css/stil.css">
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-titlu">ELPIS</span>
+    <span class="nav-logo-sub">Trupa de Teatru · Constanța</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Acasă</a></li>
+    <li><a href="spectacole.html">Spectacole</a></li>
+    <li><a href="despre.html">Despre noi</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-actiuni">
+    <a id="btn-auth" class="btn btn-secundar">Intră în cont</a>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="eyebrow">Legal</span>
+  <h1>Politica de <em>Confidențialitate</em></h1>
+  <p>Ultima actualizare: August 2026</p>
+</div>
+
+<section class="sectiune" style="max-width:800px;margin:0 auto">
+
+  <h2 style="font-size:24px;margin-bottom:16px">1. Cine suntem</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Trupa de Teatru Elpis Constanța operează site-ul de rezervări de bilete. 
+    Ne poți contacta la <a href="mailto:office@elpis.ro" style="color:var(--auriu)">office@elpis.ro</a>.
+  </p>
+
+  <h2 style="font-size:24px;margin-bottom:16px">2. Ce date colectăm</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Colectăm următoarele date personale când îți creezi un cont sau faci o rezervare:
+    <br><br>
+    • <strong style="color:var(--alb)">Nume și prenume</strong> — pentru identificarea rezervării<br>
+    • <strong style="color:var(--alb)">Adresa de email</strong> — pentru trimiterea confirmărilor și biletelor<br>
+    • <strong style="color:var(--alb)">Parolă</strong> — stocată criptat, nu o putem vedea<br>
+    • <strong style="color:var(--alb)">Istoricul rezervărilor</strong> — pentru gestionarea biletelor
+  </p>
+
+  <h2 style="font-size:24px;margin-bottom:16px">3. De ce colectăm aceste date</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Datele tale sunt folosite exclusiv pentru:<br><br>
+    • Gestionarea contului tău<br>
+    • Trimiterea biletelor pe email<br>
+    • Confirmarea și gestionarea rezervărilor<br>
+    • Comunicări legate de spectacole rezervate
+  </p>
+
+  <h2 style="font-size:24px;margin-bottom:16px">4. Cât timp păstrăm datele</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Datele tale sunt păstrate atât timp cât ai un cont activ pe site. 
+    Dacă îți ștergi contul, toate datele personale sunt șterse permanent din baza noastră de date.
+  </p>
+
+  <h2 style="font-size:24px;margin-bottom:16px">5. Cu cine împărtășim datele</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Nu vindem și nu împărtășim datele tale cu terți în scop comercial. 
+    Folosim serviciul <strong style="color:var(--alb)">SendGrid</strong> pentru trimiterea emailurilor 
+    și <strong style="color:var(--alb)">MongoDB Atlas</strong> pentru stocarea datelor în siguranță.
+  </p>
+
+  <h2 style="font-size:24px;margin-bottom:16px">6. Drepturile tale (GDPR)</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Conform GDPR, ai următoarele drepturi:<br><br>
+    • <strong style="color:var(--alb)">Dreptul de acces</strong> — poți vedea ce date deținem despre tine<br>
+    • <strong style="color:var(--alb)">Dreptul la rectificare</strong> — poți corecta datele incorecte<br>
+    • <strong style="color:var(--alb)">Dreptul la ștergere</strong> — poți șterge contul și toate datele din Setări cont<br>
+    • <strong style="color:var(--alb)">Dreptul la portabilitate</strong> — poți solicita datele tale în format electronic
+  </p>
+
+  <h2 style="font-size:24px;margin-bottom:16px">7. Cookie-uri</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Site-ul nostru nu folosește cookie-uri de tracking sau publicitate. 
+    Folosim LocalStorage doar pentru menținerea sesiunii de autentificare.
+  </p>
+
+  <h2 style="font-size:24px;margin-bottom:16px">8. Contact</h2>
+  <p style="color:var(--text-secundar);margin-bottom:24px;line-height:1.9">
+    Pentru orice întrebări legate de datele tale personale, ne poți contacta la 
+    <a href="mailto:office@elpis.ro" style="color:var(--auriu)">office@elpis.ro</a>.
+  </p>
+
+</section>
+
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal"><button class="modal-inchide" onclick="inchideModal()">✕</button><div id="modal-continut"></div></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-titlu">ELPIS</div><p>Trupa de Teatru Elpis Constanța.</p></div>
+    <div><span class="footer-sectiune-titlu">Navigare</span><ul class="footer-links"><li><a href="../index.html">Acasă</a></li><li><a href="spectacole.html">Spectacole</a></li><li><a href="despre.html">Despre noi</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><span class="footer-sectiune-titlu">Legal</span><ul class="footer-links"><li><a href="termeni.html">Termeni și Condiții</a></li><li><a href="politica.html">Politica de Confidențialitate</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Trupa de Teatru Elpis Constanța. · 
+    <a href="pages/termeni.html" style="color:var(--text-gri);text-decoration:none">Termeni</a> · 
+    <a href="pages/politica.html" style="color:var(--text-gri);text-decoration:none">Confidențialitate</a>
+  </div>
+</footer>
+<script src="../js/app.js"></script>
+</body>
+</html>

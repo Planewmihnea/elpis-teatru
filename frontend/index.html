@@ -201,10 +201,10 @@
 </div>
 
 <footer>
-  <div class="footer-grid">
+  <div class="footer-grid" style="grid-template-columns:2fr 1fr 1fr 1fr">
     <div>
       <div class="footer-brand-titlu">ELPIS</div>
-      <p>Trupa de Teatru Elpis Constanța aduce pe scenă spectacole memorabile care emoționează, inspiră și îmbogățesc experiența culturală a publicului.</p>
+      <p>Trupa de Teatru Elpis Constanța aduce pe scenă producții memorabile care îmbogățesc sufletul și deschid minți.</p>
     </div>
     <div>
       <span class="footer-sectiune-titlu">Navigare</span>
@@ -222,11 +222,15 @@
         <li><a href="tel:+40726241818">0726 241 818</a></li>
       </ul>
     </div>
+    <div>
+      <span class="footer-sectiune-titlu">Legal</span>
+      <ul class="footer-links">
+        <li><a href="pages/termeni.html">Termeni și Condiții</a></li>
+        <li><a href="pages/politica.html">Politica de Confidențialitate</a></li>
+      </ul>
+    </div>
   </div>
-  <div class="footer-bottom">
-  © 2026 Trupa de Teatru Elpis Constanța. 
-  <a href="pages/termeni.html" style="color:var(--text-gri);text-decoration:none">Termeni și Condiții</a>
-</div>
+  <div class="footer-bottom">© 2026 Trupa de Teatru Elpis Constanța. Toate drepturile rezervate.</div>
 </footer>
 
 <script src="js/cortina.js"></script>
@@ -372,6 +376,28 @@ function deschideModal(stare) {
 
 if (localStorage.getItem('elpis_termeni')) {
   document.getElementById('banner-termeni').style.display = 'none';
+} else {
+  // Blochează butoanele până la acceptare
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('btn-auth')?.addEventListener('click', (e) => {
+      if (!localStorage.getItem('elpis_termeni')) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementById('banner-termeni').style.display = 'flex';
+      }
+    });
+    
+    // Butonul "Creează cont gratuit"
+    document.querySelectorAll('.btn-alb').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (!localStorage.getItem('elpis_termeni')) {
+          e.preventDefault();
+          e.stopPropagation();
+          document.getElementById('banner-termeni').style.display = 'flex';
+        }
+      });
+    });
+  });
 }
 </script>
 </body>
