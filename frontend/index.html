@@ -330,7 +330,25 @@ async function incarcaFeatured() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', incarcaFeatured);
+document.addEventListener('DOMContentLoaded', () => {
+  verificaTermeni();
+  incarcaFeatured();
+
+  document.getElementById('btn-creeaza-cont')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    deschideModalCuTermeni('inregistrare');
+  });
+
+  setTimeout(() => {
+    const btn = document.getElementById('btn-auth');
+    if (btn && !auth.esteLogat()) {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        deschideModalCuTermeni('login');
+      };
+    }
+  }, 500);
+});
 </script>
 <!-- Banner Termeni -->
 <div id="banner-termeni" style="
