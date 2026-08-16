@@ -383,13 +383,17 @@ function acceptaTermeni() {
 
 // Dacă nu a acceptat, blochează modalul de login
 const _deschideModalOriginal = deschideModal;
-function deschideModal(stare) {
+function deschideModalSigur(stare) {
   if (!localStorage.getItem('elpis_termeni')) {
-    toast.info('Trebuie să accepți Termenii și Condițiile înainte de a continua.');
     document.getElementById('banner-termeni').style.display = 'flex';
     return;
   }
-  _deschideModalOriginal(stare);
+  // Apelează direct funcția din app.js fără recursivitate
+  const ov = document.getElementById('modal-auth');
+  if (!ov) return;
+  ov.classList.add('activ');
+  stareModal = stare;
+  randeazaModal();
 }
 
 if (localStorage.getItem('elpis_termeni')) {
