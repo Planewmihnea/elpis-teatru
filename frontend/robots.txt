@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /pages/wallet.html
+Disallow: /pages/termeni.html
+Disallow: /pages/politica.html
+Sitemap: https://Planewmihnea.github.io/elpis-teatru/sitemap.xml
