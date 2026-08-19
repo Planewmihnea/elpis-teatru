@@ -361,22 +361,51 @@ footer { background: var(--albastru-dark); border-top: 1px solid var(--border-au
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; max-width: 100%; }
+
+  nav {
+    padding: 0 4%;
+    height: 60px;
+  }
+
+  .nav-logo-titlu { font-size: 18px; letter-spacing: 3px; }
+  .nav-logo-sub { font-size: 8px; }
+
   .nav-links {
-    display: none; position: fixed; top: 68px; left: 0; right: 0;
-    background: rgba(14,61,79,0.99); flex-direction: column;
-    padding: 26px 5%; gap: 20px; border-bottom: 1px solid var(--border-auriu);
+    display: none;
+    position: fixed; top: 60px; left: 0; right: 0;
+    background: rgba(14,61,79,0.99);
+    flex-direction: column;
+    padding: 24px 5%; gap: 20px;
+    border-bottom: 1px solid var(--border-auriu);
+    z-index: 999;
   }
   .nav-links.deschis { display: flex; }
   .nav-hamburger { display: flex; }
-#btn-wallet { display: none !important; }
-.nav-actiuni { gap: 6px; }
-#btn-auth {
-  padding: 8px 12px;
-  font-size: 10px;
-}
+  .nav-actiuni { gap: 6px; }
+
+  #btn-auth {
+    padding: 7px 12px;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .btn-login {
+    padding: 7px 12px;
+    font-size: 10px;
+  }
+
+  #btn-wallet {
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+
+  .nav-avatar { width: 30px; height: 30px; font-size: 12px; }
+  .nav-prenume { display: none; }
+
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
   .sectiune { padding: 60px 5%; }
-  .footer-grid { grid-template-columns: 1fr; gap: 26px; }
+  .footer-grid { grid-template-columns: 1fr !important; gap: 26px; }
   .modal { padding: 26px 18px; }
 }
 
