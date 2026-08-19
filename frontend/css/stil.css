@@ -38,6 +38,7 @@ html { scroll-behavior: smooth; }
 
 body {
   background: var(--albastru-dark);
+  overflow-x: hidden;
   color: var(--text-principal);
   font-family: var(--font-body);
   font-weight: 400;
@@ -367,6 +368,12 @@ footer { background: var(--albastru-dark); border-top: 1px solid var(--border-au
   }
   .nav-links.deschis { display: flex; }
   .nav-hamburger { display: flex; }
+#btn-wallet { display: none !important; }
+.nav-actiuni { gap: 6px; }
+#btn-auth {
+  padding: 8px 12px;
+  font-size: 10px;
+}
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
   .sectiune { padding: 60px 5%; }
   .footer-grid { grid-template-columns: 1fr; gap: 26px; }
